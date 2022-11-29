@@ -1,22 +1,15 @@
-pipeline {
-
-    environment {
-        PATH = '/usr/bin:$PATH'
-    }
-
-    agent any
-
-    stages {
-        stage('Checkout Source') {
-            steps {
-                git branch: 'Parichay', credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
-            }
-        }
-
-        stage('Build code') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
+pipeline{
+    agent  {
+        node {
+            label 'slave1'
     }
 }
+    stages{
+        stage ('git checkout') {
+            steps{
+                git branch: 'Jeetu', credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
+            }
+        }
+
+    }
+}  
