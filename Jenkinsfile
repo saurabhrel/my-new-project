@@ -1,9 +1,5 @@
 pipeline {
 
-    environment {
-        PATH = '/usr/bin:$PATH'
-    }
-
     agent any
 
     stages {
@@ -14,6 +10,9 @@ pipeline {
         }
 
         stage('Build code') {
+            environment {
+                PATH = '/usr/bin:$PATH'
+                }
             steps {
                 sh 'mvn clean install'
             }
