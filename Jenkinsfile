@@ -1,7 +1,7 @@
 pipeline {
 
     environment {
-        dockerimagename = "thetips4you/nodeapp"
+        dockerimagename = ""
         dockerImage = ""
     }
 
@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
+                git branch: 'Parichay', credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
             }
         }
 
