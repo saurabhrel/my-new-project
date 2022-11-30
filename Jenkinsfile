@@ -18,10 +18,18 @@ pipeline {
             }
         }
 
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-9.7.1') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
         stage('deploy') {
             steps {
                 sshagent(['tomcat-deploy']) {
-                    sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war ec2-user@15.206.172.31:/opt/tomcat/apache-tomcat-9.0.69/webapps'
+                    sh 'scp -o StrictHostKeyChecking=no webapp/target/weapp.war ec2-user@15.206.172.31:/opt/tomcat/apache-tomcat-9.0.69/webapps'
                 }
             }
         }
