@@ -18,11 +18,10 @@ pipeline {
             }
         }
 
-        stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube-9.7.1') {
-                    sh 'mvn sonar:sonar'
-                }
+        stage('SonarQube Analysis') {
+            def mvn = tool 'Maven';
+            withSonarQubeEnv() {
+                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=my-new-project"
             }
         }
 
