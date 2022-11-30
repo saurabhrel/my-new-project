@@ -1,8 +1,11 @@
 pipeline {
 
-    agent any
+    agent {
+        label "Bisht"
+    }
     environment {
         PATH = '/usr/bin:$PATH'
+        DOCKERHUB_CREDENTIALS = credentials('devops-project')
     }
 
     stages {
@@ -18,12 +21,19 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                def mvn = tool 'Maven';
-                withSonarQubeEnv() {
-                    sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=my-new-project"
-                }
+       stage('Build docker image') {
+            steps {  
+                sh 'docker build -t parichaybisht/projectapp:$BUILD_NUMBER .'
+            }
+        }
+        stage('login to dockerhub') {
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('push image') {
+            steps{
+                sh 'docker push parichaybisht/projectapp:$BUILD_NUMBER'
             }
         }
 
@@ -34,5 +44,11 @@ pipeline {
                 }
             }
         }
+    }
+}
+
+post {
+    always {
+        sh 'docker logout'
     }
 }
