@@ -4,7 +4,6 @@ pipeline {
         label "Bisht"
     }
     environment {
-        PATH = '/usr/bin:$PATH'
         DOCKERHUB_CREDENTIALS = credentials('devops-project')
     }
 
