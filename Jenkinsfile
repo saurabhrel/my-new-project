@@ -1,8 +1,6 @@
 pipeline {
 
-    agent {
-        label "Bisht"
-    }
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('devops-project')
     }
