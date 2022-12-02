@@ -1,0 +1,14 @@
+kind: Service                
+apiVersion: v1
+metadata:
+  name: parichay
+  labels:
+    app: parichay
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080                  
+      targetPort: 8080            
+      nodePort: 31000
+  selector:
+    app: mrdevops
