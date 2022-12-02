@@ -1,1 +1,20 @@
-enter your deployment steps here
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: parichay
+spec:
+   replicas: 2
+   selector:
+    matchLabels:
+     app: parichay
+   template:
+      metadata:
+        labels:
+          app: parichay
+      spec:
+       containers:
+        - name: mrdevops
+          image: parichaybisht/parichay
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
