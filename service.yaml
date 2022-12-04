@@ -11,4 +11,4 @@ spec:
       targetPort: 8080            
       nodePort: 31000
   selector:
-    app: mrdevops
+    app: parichay
