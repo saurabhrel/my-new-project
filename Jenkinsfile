@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git branch: 'Parichay', credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
+                git branch: 'parichay', credentialsId: 'git-project', url: 'https://github.com/saurabhrel/my-new-project.git'
             }
         }
 
@@ -22,9 +22,9 @@ pipeline{
             steps{
                 sshagent(['Ansible-Credential']) {
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/devops-project_parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/devops-project_parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/devops-project_parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:v1.$BUILD_ID'
@@ -50,8 +50,8 @@ pipeline{
             steps{
                 sshagent(['Kubernetes-Credential']){
                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.9.17'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/deployment.yaml ubuntu@172.31.9.17:/home/ubuntu'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/service.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                    sh 'scp /var/lib/jenkins/workspace/devops-project_parichay/deployment.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                    sh 'scp /var/lib/jenkins/workspace/devops-project_parichay/service.yaml ubuntu@172.31.9.17:/home/ubuntu'
                 }
             }
         }
