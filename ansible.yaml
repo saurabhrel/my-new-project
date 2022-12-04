@@ -1,4 +1,4 @@
-- hosts: K8S-ip
+- hosts: demo
   become: true
   tasks: 
      - name: delete old deployment
