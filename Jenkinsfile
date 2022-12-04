@@ -21,14 +21,14 @@ pipeline{
         stage("Build Image"){
             steps{
                 sshagent(['Ansible-Credential']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/Dockerfile ubuntu@172.31.12.18:/home/ubuntu'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/ansible.yaml ubuntu@172.31.12.18:/home/ubuntu'
-                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/webapp/target/webapp.war ubuntu@172.31.12.18:/home/ubuntu'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 cd /home/ubuntu'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:v1.$BUILD_ID'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:latest'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137'
+                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:v1.$BUILD_ID'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:latest'
                 }
             }
         }
@@ -37,27 +37,31 @@ pipeline{
             steps{
                 sshagent(['Ansible-Credential']){
                     withCredentials([string(credentialsId: 'dockerhub_password', variable: 'dockerhub_password')]) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker login -u parichaybisht -p ${dockerhub_password}"
-                        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image push parichaybisht/$JOB_NAME:v1.$BUILD_ID'
-                        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image push parichaybisht/$JOB_NAME:latest'
-                        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 docker image rm parichaybisht/$JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:latest $JOB_NAME:v1.$BUILD_ID'
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker login -u parichaybisht -p ${dockerhub_password}"
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/$JOB_NAME:v1.$BUILD_ID'
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/$JOB_NAME:latest'
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image rm parichaybisht/$JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:latest $JOB_NAME:v1.$BUILD_ID'
                     }
                 }
             }
         }
 
         stage("copying Manifests to Kubernetes"){
-            sshagent(['Kubernetes-Credential']){
-                sh 'ssh -o StrictHostKeyChecking=no ubuntu@K8S-ip'
-                sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/deloyment.yaml ubuntu@K8S-ip:/home/ubuntu'
-                sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/service.yaml ubuntu@K8S-ip:/home/ubuntu'
+            steps{
+                sshagent(['Kubernetes-Credential']){
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.9.17'
+                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/deployment.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                    sh 'scp /var/lib/jenkins/workspace/DevOps_Project_Parichay/service.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                }
             }
         }
 
         stage('Deploy to Kubernetes'){
-            sshagent(['Ansible-Credential']){
-                sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 cd /home/ubuntu'
-                sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.18 ansible-playbook ansible.yaml'
+            steps{
+                sshagent(['Ansible-Credential']){
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 ansible-playbook ansible.yaml'
+                }
             }
         }
     }
