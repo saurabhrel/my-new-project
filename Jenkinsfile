@@ -17,14 +17,22 @@ pipeline{
                 sh 'mvn clean install'
             }
         }
-
-        stage("Build Image"){
+        
+        stage('copying files to Ansible-Docker server'){
             steps{
                 sshagent(['Ansible-Credential']) {
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137'
                     sh 'scp /var/lib/jenkins/workspace/project_parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'scp /var/lib/jenkins/workspace/project_parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'scp /var/lib/jenkins/workspace/project_parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
+                }
+            }
+        }
+
+        stage("Build Image"){
+            steps{
+                sshagent(['Ansible-Credential']) {
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t parichay:v1.$BUILD_ID .'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag parichay:v1.$BUILD_ID parichaybisht/parichay:v1.$BUILD_ID'
