@@ -58,7 +58,7 @@ pipeline{
 
         stage('Deploy to Kubernetes'){
             parallel{
-                stage{
+                stage('Run Playbook'){
                     steps{
                         sshagent(['Ansible-Credential']){
                             sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
@@ -66,7 +66,7 @@ pipeline{
                         }
                     }
                 }
-                stage{
+                stage('ssh K8S'){
                     steps{
                         sshagent(['Kubernetes-Credential']){
                             sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.9.17'
