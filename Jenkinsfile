@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label "gaurav"
-    }
+    agent any
     
     stages {
         stage ('git checkout') {
