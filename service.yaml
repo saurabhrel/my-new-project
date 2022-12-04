@@ -5,7 +5,7 @@ metadata:
   labels:
     app: parichay
 spec:
-  type: LoadBalancer
+  type: nodePort
   ports:
     - port: 8080                  
       targetPort: 8080            
