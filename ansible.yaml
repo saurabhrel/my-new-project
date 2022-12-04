@@ -1,6 +1,6 @@
 - hosts: demo
-  user: ubuntu
-  become: true
+  user: root
+  become: yes
   connection: ssh
   tasks: 
      - name: delete old deployment
