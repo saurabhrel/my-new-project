@@ -2,11 +2,7 @@
   user: root
   become: yes
   connection: ssh
-  tasks: 
-     - name: delete old deployment
-       command: kubectl delete -f /home/ubuntu/deployment.yaml
-     - name: delete old service
-       command: kubectl delete -f /home/ubuntu/service.yaml
+  tasks:
      - name: create new deployment
        command: kubectl apply -f /home/ubuntu/deployment.yaml
      - name: create new service
