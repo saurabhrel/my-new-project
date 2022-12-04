@@ -57,14 +57,24 @@ pipeline{
         }
 
         stage('Deploy to Kubernetes'){
-            steps{
-                sshagent(['Ansible-Credential']){
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 ansible-playbook ansible.yaml'
+            parallel{
+                stage{
+                    steps{
+                        sshagent(['Ansible-Credential']){
+                            sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
+                            sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 ansible-playbook ansible.yaml'
+                        }
+                    }
+                }
+                stage{
+                    steps{
+                        sshagent(['Kubernetes-Credential']){
+                            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.9.17'
+                        }
+                    }    
                 }
             }
-        }
-    }
+        }            
     post{
         always {
             sh 'docker logout'
