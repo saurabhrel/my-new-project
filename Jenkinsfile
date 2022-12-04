@@ -22,9 +22,9 @@ pipeline{
             steps{
                 sshagent(['Ansible-Credential']) {
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137'
-                    sh 'scp /var/lib/jenkins/workspace/devopsproject_parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
-                    sh 'scp /var/lib/jenkins/workspace/devopsproject_parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
-                    sh 'scp /var/lib/jenkins/workspace/devopsproject_parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/project_parichay/Dockerfile ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/project_parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
+                    sh 'scp /var/lib/jenkins/workspace/project_parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/$JOB_NAME:v1.$BUILD_ID'
@@ -50,8 +50,8 @@ pipeline{
             steps{
                 sshagent(['Kubernetes-Credential']){
                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.9.17'
-                    sh 'scp /var/lib/jenkins/workspace/devopsproject_parichay/deployment.yaml ubuntu@172.31.9.17:/home/ubuntu'
-                    sh 'scp /var/lib/jenkins/workspace/devopsproject_parichay/service.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                    sh 'scp /var/lib/jenkins/workspace/project_parichay/deployment.yaml ubuntu@172.31.9.17:/home/ubuntu'
+                    sh 'scp /var/lib/jenkins/workspace/project_parichay/service.yaml ubuntu@172.31.9.17:/home/ubuntu'
                 }
             }
         }
