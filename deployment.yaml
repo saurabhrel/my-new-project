@@ -13,7 +13,7 @@ spec:
           app: parichay
       spec:
        containers:
-        - name: mrdevops
+        - name: parichay
           image: parichaybisht/parichay:latest
           imagePullPolicy: Always
           ports:
