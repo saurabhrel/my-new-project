@@ -40,7 +40,7 @@ pipeline{
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker login -u parichaybisht -p ${dockerhub_password}"
                         sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/parichay:v1.$BUILD_ID'
                         sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/parichay:latest'
-                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image rm parichaybisht/$JOB_NAME:v1.$BUILD_ID parichaybisht/parichay:latest $JOB_NAME:v1.$BUILD_ID'
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image rm parichaybisht/$JOB_NAME:v1.$BUILD_ID parichaybisht/parichay:latest parichay:v1.$BUILD_ID'
                     }
                 }
             }
