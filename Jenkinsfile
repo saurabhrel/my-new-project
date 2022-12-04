@@ -26,9 +26,9 @@ pipeline{
                     sh 'scp /var/lib/jenkins/workspace/project_parichay/ansible.yaml ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'scp /var/lib/jenkins/workspace/project_parichay/webapp/target/webapp.war ec2-user@172.31.43.137:/home/ec2-user'
                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 cd /home/ec2-user'
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/parichay:v1.$BUILD_ID'
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag $JOB_NAME:v1.$BUILD_ID parichaybisht/parichay:latest'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image build -t parichay:v1.$BUILD_ID .'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag parichay:v1.$BUILD_ID parichaybisht/parichay:v1.$BUILD_ID'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image tag parichay:v1.$BUILD_ID parichaybisht/parichay:latest'
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline{
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker login -u parichaybisht -p ${dockerhub_password}"
                         sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/parichay:v1.$BUILD_ID'
                         sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image push parichaybisht/parichay:latest'
-                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image rm parichaybisht/$JOB_NAME:v1.$BUILD_ID parichaybisht/parichay:latest parichay:v1.$BUILD_ID'
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.43.137 docker image rm parichaybisht/parichay:v1.$BUILD_ID parichaybisht/parichay:latest parichay:v1.$BUILD_ID'
                     }
                 }
             }
